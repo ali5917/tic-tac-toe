@@ -18,6 +18,7 @@ button {
 
 .main {
     background-color: var(--body-bg);
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -48,11 +49,10 @@ button {
 
 .form {
     display: flex;
-    /* display: none; */
     justify-content: center;
     align-items: center;
     flex: 1;
-    width: 100vw;
+    min-width: 100vw;
 }
 
 #name-form {
@@ -98,14 +98,12 @@ button {
 
 .game-div {
     display: none;
-    /* display: flex; */
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 3em;
     flex: 1;
-    width: 100vw;
-    /* background-color: lightpink; */
+    min-width: 100vw;
 }
 
 .board-div {
@@ -117,7 +115,7 @@ button {
 
 .cell {
     border-radius: 20px;
-    font-size: 50px;
+    font-size: 60px;
     font-weight: 700;
     background-color: aquamarine;
     text-shadow: 2px 2px 5px rgba(0, 208, 255, 0.6);
@@ -140,4 +138,71 @@ button {
 
 .game-div button:hover {
     color: yellow;
+}
+
+
+@media (max-width: 540px) {
+    .nav {
+        padding: 1em 2em;
+    }
+
+    .nav button {
+        font-size: 18px;
+    }
+
+    #name-form {
+        padding: 3em 3em;
+    }
+
+    #name-form input {
+        font-size: 18px;
+    }
+
+    #name-form button {
+        padding: 0.25em 1.5em;
+        font-size: 18px;
+    }
+
+    .board-div {
+        grid-template-rows: repeat(3, 100px);
+        grid-template-columns: repeat(3, 100px);
+    }
+}
+
+@media (max-width: 380px) {
+    .main {
+        gap: 0;
+    }
+
+    .nav {
+        padding: 1em 2em;
+        gap: 3em;
+    }
+
+    .nav button {
+        font-size: 16px;
+    }
+
+    #name-form {
+        padding: 1em 1em;
+    }
+
+    #name-form input {
+        font-size: 16px;
+    }
+
+    #name-form button {
+        padding: 0.25em 1.5em;
+        font-size: 16px;
+    }
+    
+    .board-div {
+        grid-template-rows: repeat(3, 80px);
+        grid-template-columns: repeat(3, 80px);
+    }
+    
+    .game-div button {
+        padding: 0.5em 2em;
+        font-size: 18px;
+    }
 }

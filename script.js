@@ -116,6 +116,8 @@ document.getElementById("name-form").addEventListener("submit", handleFormInput)
 // Rendering Board
 const boardContainer = document.querySelector(".board-div");
 function renderBoard () {
+    boardContainer.innerHTML = "";
+
     for (let i = 0; i < 9; i++) {
         const cell = document.createElement("div");
         cell.classList.add("cell");
@@ -128,7 +130,7 @@ function renderBoard () {
                 cell.textContent = gameController.getCurrentPlayer().sign;
             }
         })
-
+        
         cell.addEventListener("mouseleave", () => {
             const board = gameBoard.getBoard();
             cell.textContent = board[i];
@@ -176,7 +178,7 @@ function updateBoard () {
             cell.style.borderRadius = "0px";
         })
     } else if (gameController.isTie()) {
-        header.textContent = `Math Tied! 😀`;
+        header.textContent = `Game Tied! 😀`;
         boardDiv.style.gap = "0px";
         cells.forEach(cell => {
             cell.style.borderRadius = "0px";
@@ -191,10 +193,17 @@ function updateBoard () {
 }
 
 // Handle Restart Click
+let rotated = false;
 const restartBtn = document.querySelector(".game-div button");
 restartBtn.addEventListener("click", handleRestart);
 
 function handleRestart () {
+    const boardDiv = document.querySelector(".board-div");
+    rotated = (rotated == false) ? true : false;
+    if (rotated) {
+        boardDiv.style.transform = "rotateY(180deg)";
+    } else boardDiv.style.transform = "rotateY(0deg)";
+
     gameController.restart();
     updateBoard();
 }
