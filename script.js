@@ -222,7 +222,10 @@ menuBtn.addEventListener("click", () => {
 })
 
 gameBtn.addEventListener("click", () => {
-    if (gameController.getCurrentPlayer().name == "") return;
+    if (gameController.getCurrentPlayer().name == "") {
+        alert("Please name your players.")
+        return;
+    }
     document.querySelector(".form").style.display = "none";
     document.querySelector(".game-div").style.display = "flex";
 })
