@@ -92,14 +92,3 @@ const gameController = (() => {
 
     return {playRound, restart}
 })();
-
-gameBoard.printBoard();
-gameController.playRound(2);
-gameController.playRound(1);
-gameController.playRound(4);
-gameController.playRound(7);
-gameController.playRound(5);
-gameController.playRound(3);
-gameController.playRound(0);
-gameController.playRound(6);
-gameController.playRound(8);
