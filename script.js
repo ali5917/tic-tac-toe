@@ -102,7 +102,10 @@ const handleFormInput = (e) => {
     let p1 = document.getElementById("player1").value.trim();
     let p2 = document.getElementById("player2").value.trim();
 
-    if (!p1 || !p2) return;
+    if (!p1 || !p2) {
+        alert("Please name your players.");
+        return;
+    }
 
     gameController.setPlayers(p1,p2);
     gameController.restart();
