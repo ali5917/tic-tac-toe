@@ -46,6 +46,8 @@ const gameController = (() => {
     }
     let currentPlayer = player1;
 
+    const getCurrentPlayer = () => currentPlayer;
+
     const winCombos = [[0,1,2], [3,4,5], [6,7,8],[0,3,6], [1,4,7], [2,5,8],[0,4,8], [2,4,6]];
 
     const isWin = () => {
@@ -83,18 +85,15 @@ const gameController = (() => {
                 console.log(`${currentPlayer.name} tied ${togglePlayer().name}`)
                 return;
             }
-
             currentPlayer = togglePlayer();
-        }  
-        
-        
+        }     
     }
 
     const restart = () => {
         gameBoard.resetBoard();
     }
 
-    return {playRound, restart, setPlayers}
+    return {playRound, restart, setPlayers, isWin, isTie, getCurrentPlayer}
 })();
 
 // Handling Form Submission
@@ -106,6 +105,79 @@ const handleFormInput = (e) => {
     if (!p1 || !p2) return;
 
     gameController.setPlayers(p1,p2);
-    document.querySelector('form').style.display = "none";
+    document.querySelector(".form").style.display = "none";
+    document.querySelector(".game-div").style.display = "flex";
+    renderBoard();
+    updateBoard();
 }
 document.getElementById("name-form").addEventListener("submit", handleFormInput);
+
+// Rendering Board
+const boardContainer = document.querySelector(".board-div");
+function renderBoard () {
+    for (let i = 0; i < 9; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = i;
+        cell.addEventListener("click", handleCellClick);
+        boardContainer.appendChild(cell);
+    }
+}
+
+// Handle Cell Clicks
+function handleCellClick(e) {
+    if (gameController.isWin() || gameController.isTie()) return;
+    const cell = e.target;
+    const index = cell.dataset.index;
+    gameController.playRound(index);
+    updateBoard();
+}
+
+// Update Board
+function updateBoard () {
+    let board = gameBoard.getBoard();
+    const cells = document.querySelectorAll(".cell");
+    let header = document.querySelector(".game-div div h1");
+    
+    cells.forEach((cell,index) => {
+        cell.textContent = board[index];
+        if (cell.textContent == "X") {
+            cell.style.backgroundColor = "#003c37";
+            cell.style.color = "white";
+        } else if (cell.textContent == "O") {
+            cell.style.backgroundColor = "white";
+            cell.style.color = "#003c37";
+        } else {
+            cell.style.backgroundColor = "aquamarine";
+        }
+    });
+
+    const boardDiv = document.querySelector(".board-div");
+    if (gameController.isWin()){
+        let winner = gameController.getCurrentPlayer().name;
+        header.textContent = `${winner} Wins! 🎉`;
+        boardDiv.style.gap = "0px";
+        cells.forEach(cell => {
+            cell.style.borderRadius = "0px";
+        })
+    } else if (gameController.isTie()) {
+        header.textContent = `Math Tied! 😀`;
+        boardDiv.style.gap = "0px";
+        cells.forEach(cell => {
+            cell.style.borderRadius = "0px";
+        })
+    } else {
+        header.textContent = `${gameController.getCurrentPlayer().name}'s turn`;
+    }
+
+    cells.forEach((cell, index) => {
+        cell.addEventListener("mouseover", () => {
+            if (cell.textContent == " ") {
+                cell.textContent = gameController.getCurrentPlayer().sign;
+            }
+        })
+        cell.addEventListener("mouseleave", () => {
+            cell.textContent = board[index];
+        })
+    })
+}
