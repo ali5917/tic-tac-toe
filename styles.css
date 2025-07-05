@@ -1,7 +1,3 @@
-:root {
-    --body-bg: #d0fff9; 
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -17,7 +13,7 @@ button {
 }
 
 .main {
-    background-color: var(--body-bg);
+    background-color: #d0fff9;
     width: 100%;
     display: flex;
     flex-direction: column;

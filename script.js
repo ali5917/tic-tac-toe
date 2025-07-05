@@ -176,6 +176,9 @@ function updateBoard () {
         boardDiv.style.gap = "0px";
         cells.forEach(cell => {
             cell.style.borderRadius = "0px";
+            if (cell.textContent == " ") {
+                cell.style.backgroundColor = "#d0fff9";
+            }
         })
     } else if (gameController.isTie()) {
         header.textContent = `Game Tied! 😀`;
