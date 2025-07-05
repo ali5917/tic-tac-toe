@@ -36,8 +36,6 @@ const Player = (name, sign) => {
 }
 
 const gameController = (() => {
-    let board = gameBoard.getBoard();
-
     let player1 = Player("", "X");
     let player2 = Player("", "O");
     const setPlayers = (p1,p2) => {
@@ -51,6 +49,7 @@ const gameController = (() => {
     const winCombos = [[0,1,2], [3,4,5], [6,7,8],[0,3,6], [1,4,7], [2,5,8],[0,4,8], [2,4,6]];
 
     const isWin = () => {
+        const board = gameBoard.getBoard();
         let thisSign = currentPlayer.sign;
         for (let combo of winCombos) {
             let [a, b, c] = combo;
@@ -91,6 +90,7 @@ const gameController = (() => {
 
     const restart = () => {
         gameBoard.resetBoard();
+        currentPlayer = togglePlayer();
     }
 
     return {playRound, restart, setPlayers, isWin, isTie, getCurrentPlayer}
@@ -105,6 +105,7 @@ const handleFormInput = (e) => {
     if (!p1 || !p2) return;
 
     gameController.setPlayers(p1,p2);
+    gameController.restart();
     document.querySelector(".form").style.display = "none";
     document.querySelector(".game-div").style.display = "flex";
     renderBoard();
@@ -119,7 +120,20 @@ function renderBoard () {
         const cell = document.createElement("div");
         cell.classList.add("cell");
         cell.dataset.index = i;
+        
         cell.addEventListener("click", handleCellClick);
+        
+        cell.addEventListener("mouseover", () => {
+            if (cell.textContent == " ") {
+                cell.textContent = gameController.getCurrentPlayer().sign;
+            }
+        })
+
+        cell.addEventListener("mouseleave", () => {
+            const board = gameBoard.getBoard();
+            cell.textContent = board[i];
+        })
+        
         boardContainer.appendChild(cell);
     }
 }
@@ -138,6 +152,7 @@ function updateBoard () {
     let board = gameBoard.getBoard();
     const cells = document.querySelectorAll(".cell");
     let header = document.querySelector(".game-div div h1");
+    const boardDiv = document.querySelector(".board-div");
     
     cells.forEach((cell,index) => {
         cell.textContent = board[index];
@@ -149,10 +164,10 @@ function updateBoard () {
             cell.style.color = "#003c37";
         } else {
             cell.style.backgroundColor = "aquamarine";
+            cell.style.color = "white";
         }
     });
 
-    const boardDiv = document.querySelector(".board-div");
     if (gameController.isWin()){
         let winner = gameController.getCurrentPlayer().name;
         header.textContent = `${winner} Wins! 🎉`;
@@ -168,16 +183,38 @@ function updateBoard () {
         })
     } else {
         header.textContent = `${gameController.getCurrentPlayer().name}'s turn`;
+        boardDiv.style.gap = "10px";
+        cells.forEach(cell => {
+            cell.style.borderRadius = "20px";
+        })
     }
-
-    cells.forEach((cell, index) => {
-        cell.addEventListener("mouseover", () => {
-            if (cell.textContent == " ") {
-                cell.textContent = gameController.getCurrentPlayer().sign;
-            }
-        })
-        cell.addEventListener("mouseleave", () => {
-            cell.textContent = board[index];
-        })
-    })
 }
+
+// Handle Restart Click
+const restartBtn = document.querySelector(".game-div button");
+restartBtn.addEventListener("click", handleRestart);
+
+function handleRestart () {
+    gameController.restart();
+    updateBoard();
+}
+
+// Handle Nav Clicks
+const menuBtn = document.querySelector(".menuBtn");
+const gameBtn = document.querySelector(".gameBtn");
+const devBtn = document.querySelector(".devBtn");
+
+menuBtn.addEventListener("click", () => {
+    document.querySelector(".form").style.display = "flex";
+    document.querySelector(".game-div").style.display = "none";
+})
+
+gameBtn.addEventListener("click", () => {
+    if (gameController.getCurrentPlayer().name == "") return;
+    document.querySelector(".form").style.display = "none";
+    document.querySelector(".game-div").style.display = "flex";
+})
+
+devBtn.addEventListener("click", () => {
+    window.open("https://github.com/ali5917", "_blank");
+})
