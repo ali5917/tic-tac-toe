@@ -38,8 +38,12 @@ const Player = (name, sign) => {
 const gameController = (() => {
     let board = gameBoard.getBoard();
 
-    const player1 = Player("Ali", "A");
-    const player2 = Player("Ismail", "I");
+    let player1 = Player("", "X");
+    let player2 = Player("", "O");
+    const setPlayers = (p1,p2) => {
+        player1.name = p1;
+        player2.name = p2;
+    }
     let currentPlayer = player1;
 
     const winCombos = [[0,1,2], [3,4,5], [6,7,8],[0,3,6], [1,4,7], [2,5,8],[0,4,8], [2,4,6]];
@@ -90,5 +94,18 @@ const gameController = (() => {
         gameBoard.resetBoard();
     }
 
-    return {playRound, restart}
+    return {playRound, restart, setPlayers}
 })();
+
+// Handling Form Submission
+const handleFormInput = (e) => {
+    e.preventDefault();
+    let p1 = document.getElementById("player1").value.trim();
+    let p2 = document.getElementById("player2").value.trim();
+
+    if (!p1 || !p2) return;
+
+    gameController.setPlayers(p1,p2);
+    document.querySelector('form').style.display = "none";
+}
+document.getElementById("name-form").addEventListener("submit", handleFormInput);

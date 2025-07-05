@@ -94,8 +94,5 @@ button {
 }
 
 #name-form button:hover {
-    /* background-color: #a0fff7;
-    border: solid 1px #003c37;
-    color: #003c37; */
-    transform: scale(1.1);
+    color: yellow;
 }
