@@ -131,6 +131,7 @@ function renderBoard () {
         cell.addEventListener("mouseover", () => {
             if (cell.textContent == " ") {
                 cell.textContent = gameController.getCurrentPlayer().sign;
+                cell.style.cursor = "default";
             }
         })
         
